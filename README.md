@@ -10,7 +10,7 @@ Convert a `.bat` script into a standalone `.exe` using Windows built-in tools �
 
 ### Features
 
-- Wraps batch script logic in a C# launcher
+- Embeds your `.bat` content directly into the EXE
 - Supports custom `.ico` icon
 - Auto-requests UAC elevation (admin rights) at runtime
 - Compiled with `csc.exe` (.NET Framework, built into Windows)
@@ -19,35 +19,39 @@ Convert a `.bat` script into a standalone `.exe` using Windows built-in tools �
 
 | File | Description |
 |------|-------------|
-| `launcher.cs` | C# wrapper that runs your batch commands |
-| `build.ps1` | PowerShell script to compile the EXE |
+| `build.ps1` | PowerShell script that generates and compiles the EXE |
 
 ### Usage
 
-**1. Edit `launcher.cs`**
-
-Replace the commands inside `Main()` with your own:
-
-```csharp
-Process.Start(new ProcessStartInfo("your-command", "arguments") {
-    UseShellExecute = false,
-    CreateNoWindow = true
-}).WaitForExit();
-```
-
-Remove the `IsAdmin()` check if your script does not require elevated privileges.
-
-**2. Add an icon (optional)**
-
-Place your `icon.ico` in the same folder as `build.ps1`.
-
-**3. Compile**
+Run `build.ps1` with the following parameters:
 
 ```powershell
-.\build.ps1
+.\build.ps1 -Bat <path-to-bat> [-Ico <path-to-ico>] [-Out <output-name.exe>]
 ```
 
-Output: your `.exe` in the same folder.
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `-Bat` | Yes | Path to your `.bat` file (absolute or relative) |
+| `-Ico` | No | Path to your `.ico` icon file (absolute or relative) |
+| `-Out` | No | Output EXE filename (defaults to same name as the bat file) |
+
+### Examples
+
+```powershell
+# Minimal — output will be myscript.exe next to the bat file
+.\build.ps1 -Bat "C:\Scripts\myscript.bat"
+
+# With custom icon
+.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico"
+
+# With custom icon and custom output name
+.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
+
+# Relative paths also work (relative to where you run the command)
+.\build.ps1 -Bat "..\myscript.bat" -Ico "..\icon.ico"
+```
+
+The compiled EXE is placed in the **same folder as your `.bat` file**.
 
 ### Requirements
 
@@ -62,7 +66,7 @@ Output: your `.exe` in the same folder.
 
 ### 功能特色
 
-- 將批次腳本邏輯包裝成 C# 啟動器
+- 將 `.bat` 內容直接嵌入 EXE
 - 支援自訂 `.ico` 圖示
 - 執行時自動請求 UAC 提權（管理員權限）
 - 使用 `csc.exe` 編譯（.NET Framework，Windows 內建）
@@ -71,35 +75,39 @@ Output: your `.exe` in the same folder.
 
 | 檔案 | 說明 |
 |------|------|
-| `launcher.cs` | 執行批次指令的 C# 包裝器 |
-| `build.ps1` | 用於編譯 EXE 的 PowerShell 腳本 |
+| `build.ps1` | 自動產生並編譯 EXE 的 PowerShell 腳本 |
 
 ### 使用方式
 
-**1. 修改 `launcher.cs`**
-
-將 `Main()` 內的指令替換成你自己的：
-
-```csharp
-Process.Start(new ProcessStartInfo("你的指令", "參數") {
-    UseShellExecute = false,
-    CreateNoWindow = true
-}).WaitForExit();
-```
-
-若腳本不需要管理員權限，可移除 `IsAdmin()` 的檢查邏輯。
-
-**2. 加入圖示（選填）**
-
-將 `icon.ico` 放到與 `build.ps1` 相同的資料夾中。
-
-**3. 編譯**
+執行 `build.ps1` 並傳入以下參數：
 
 ```powershell
-.\build.ps1
+.\build.ps1 -Bat <bat檔路徑> [-Ico <ico檔路徑>] [-Out <輸出檔名.exe>]
 ```
 
-輸出：同資料夾下產生 `.exe` 執行檔。
+| 參數 | 必填 | 說明 |
+|------|------|------|
+| `-Bat` | 是 | `.bat` 檔案路徑（絕對或相對路徑皆可） |
+| `-Ico` | 否 | `.ico` 圖示檔路徑（絕對或相對路徑皆可） |
+| `-Out` | 否 | 輸出 EXE 的檔名（預設與 bat 檔同名） |
+
+### 範例
+
+```powershell
+# 最簡用法 — 輸出 myscript.exe，放在 bat 檔同一資料夾
+.\build.ps1 -Bat "C:\Scripts\myscript.bat"
+
+# 加入自訂圖示
+.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico"
+
+# 加入自訂圖示並指定輸出檔名
+.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
+
+# 相對路徑也可以（相對於執行指令的位置）
+.\build.ps1 -Bat "..\myscript.bat" -Ico "..\icon.ico"
+```
+
+編譯完成的 EXE 會放在 **與 `.bat` 檔相同的資料夾**。
 
 ### 系統需求
 
