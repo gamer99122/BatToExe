@@ -19,39 +19,41 @@ Convert a `.bat` script into a standalone `.exe` using Windows built-in tools �
 
 | File | Description |
 |------|-------------|
-| `build.ps1` | PowerShell script that generates and compiles the EXE |
+| `build.bat` | Main entry point — double-click or run from cmd |
+| `build.ps1` | Backend script called by `build.bat` (do not run directly) |
 
 ### Usage
 
-Run `build.ps1` with the following parameters:
+**Recommended: use `build.bat`**
 
-```powershell
-.\build.ps1 -Bat <path-to-bat> [-Ico <path-to-ico>] [-Out <output-name.exe>]
+```
+build.bat <bat-file> [ico-file]
 ```
 
-| Parameter | Required | Description |
-|-----------|----------|-------------|
-| `-Bat` | Yes | Path to your `.bat` file (absolute or relative) |
-| `-Ico` | No | Path to your `.ico` icon file (absolute or relative) |
-| `-Out` | No | Output EXE filename (defaults to same name as the bat file) |
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `bat-file` | Yes | Path to your `.bat` file (absolute or relative) |
+| `ico-file` | No | Path to your `.ico` icon file (absolute or relative) |
 
 ### Examples
 
-```powershell
-# Minimal — output will be myscript.exe next to the bat file
-.\build.ps1 -Bat "C:\Scripts\myscript.bat"
+```batch
+:: Minimal — output will be myscript.exe next to the bat file
+build.bat "C:\Scripts\myscript.bat"
 
-# With custom icon
-.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico"
+:: With custom icon
+build.bat "C:\Scripts\myscript.bat" "C:\Scripts\icon.ico"
 
-# With custom icon and custom output name
-.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
-
-# Relative paths also work (relative to where you run the command)
-.\build.ps1 -Bat "..\myscript.bat" -Ico "..\icon.ico"
+:: Relative paths also work
+build.bat "..\myscript.bat" "..\icon.ico"
 ```
 
 The compiled EXE is placed in the **same folder as your `.bat` file**.
+
+> If you need to customize the output filename, use `build.ps1` directly with the `-Out` parameter:
+> ```powershell
+> .\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
+> ```
 
 ### Requirements
 
@@ -75,39 +77,41 @@ The compiled EXE is placed in the **same folder as your `.bat` file**.
 
 | 檔案 | 說明 |
 |------|------|
-| `build.ps1` | 自動產生並編譯 EXE 的 PowerShell 腳本 |
+| `build.bat` | 主要入口，雙擊或在 cmd 中呼叫 |
+| `build.ps1` | 被 `build.bat` 呼叫的後端腳本（不需直接執行） |
 
 ### 使用方式
 
-執行 `build.ps1` 並傳入以下參數：
+**建議使用 `build.bat`**
 
-```powershell
-.\build.ps1 -Bat <bat檔路徑> [-Ico <ico檔路徑>] [-Out <輸出檔名.exe>]
+```
+build.bat <bat檔路徑> [ico檔路徑]
 ```
 
 | 參數 | 必填 | 說明 |
 |------|------|------|
-| `-Bat` | 是 | `.bat` 檔案路徑（絕對或相對路徑皆可） |
-| `-Ico` | 否 | `.ico` 圖示檔路徑（絕對或相對路徑皆可） |
-| `-Out` | 否 | 輸出 EXE 的檔名（預設與 bat 檔同名） |
+| `bat檔路徑` | 是 | `.bat` 檔案路徑（絕對或相對路徑皆可） |
+| `ico檔路徑` | 否 | `.ico` 圖示檔路徑（絕對或相對路徑皆可） |
 
 ### 範例
 
-```powershell
-# 最簡用法 — 輸出 myscript.exe，放在 bat 檔同一資料夾
-.\build.ps1 -Bat "C:\Scripts\myscript.bat"
+```batch
+:: 最簡用法 — 輸出 myscript.exe，放在 bat 檔同一資料夾
+build.bat "C:\Scripts\myscript.bat"
 
-# 加入自訂圖示
-.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico"
+:: 加入自訂圖示
+build.bat "C:\Scripts\myscript.bat" "C:\Scripts\icon.ico"
 
-# 加入自訂圖示並指定輸出檔名
-.\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
-
-# 相對路徑也可以（相對於執行指令的位置）
-.\build.ps1 -Bat "..\myscript.bat" -Ico "..\icon.ico"
+:: 相對路徑也可以
+build.bat "..\myscript.bat" "..\icon.ico"
 ```
 
 編譯完成的 EXE 會放在 **與 `.bat` 檔相同的資料夾**。
+
+> 若需要自訂輸出檔名，可直接使用 `build.ps1` 的 `-Out` 參數：
+> ```powershell
+> .\build.ps1 -Bat "C:\Scripts\myscript.bat" -Ico "C:\Scripts\icon.ico" -Out "MyApp.exe"
+> ```
 
 ### 系統需求
 
