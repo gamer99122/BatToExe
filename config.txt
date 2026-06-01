@@ -1,0 +1,2 @@
+﻿BAT=E:\Code\Bat 轉 exe\BatToExe\your_script.bat
+PNG=E:\Code\Bat 轉 exe\BatToExe\your_icon.png

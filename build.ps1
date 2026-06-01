@@ -1,8 +1,19 @@
 param(
-    [Parameter(Mandatory)][string]$Bat,
+    [string]$Bat,
     [string]$Png,
-    [string]$Out
+    [string]$Out,
+    [string]$Config
 )
+
+# Read config.txt if provided
+if ($Config -and (Test-Path $Config)) {
+    Get-Content $Config | ForEach-Object {
+        if ($_ -match '^BAT=(.+)$' -and -not $Bat) { $Bat = $Matches[1].Trim() }
+        if ($_ -match '^PNG=(.+)$' -and -not $Png) { $Png = $Matches[1].Trim() }
+    }
+}
+
+if (-not $Bat) { Write-Error "BAT path is not set. Please fill in config.txt."; exit 1 }
 
 # Resolve bat path
 if (-not (Test-Path $Bat)) { Write-Error "Cannot find bat file: $Bat"; exit 1 }
